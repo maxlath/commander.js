@@ -431,6 +431,15 @@ Command.prototype.option = function(flags, description, fn, defaultValue) {
   return this;
 };
 
+// Allow to register an option so that it doesn't throw when it is passed
+// but do not display it in help menus
+Command.prototype.ignore = function(flags, description, fn, defaultValue) {
+  this.option(flags, description, fn, defaultValue);
+  const option = this.options.slice(-1)[0];
+  option.ignore = true
+  return this
+}
+
 /**
  * Allow unknown options on the command line.
  *
@@ -1043,7 +1052,11 @@ Command.prototype.optionHelp = function() {
   var width = this.padWidth();
 
   // Append the help information
-  return this.options.map(function(option) {
+  return this.options
+  .filter(function(option) {
+    return option.ignore !== true
+  })
+  .map(function(option) {
     return pad(option.flags, width) + '  ' + option.description +
       ((option.bool && option.defaultValue !== undefined) ? ' (default: ' + option.defaultValue + ')' : '');
   }).concat([pad('-h, --help', width) + '  ' + 'output usage information'])
