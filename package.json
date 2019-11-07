@@ -1,6 +1,6 @@
 {
   "name": "@wikibasejs/commander",
-  "version": "2.15.1",
+  "version": "2.15.2",
   "description": "patched version of commander.js",
   "keywords": [
     "commander",
